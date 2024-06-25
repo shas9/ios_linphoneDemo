@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @ObservedObject var viewModel: LoginViewModel
+    @ObservedObject var viewModel: ViewModel
     var body: some View {
         Form {
             HStack {
@@ -54,24 +54,22 @@ struct LoginView: View {
                     }
                 })
                 {
-                    Text(viewModel.loggedIn ? "Log out & \ndelete account" : "Create & \nlog in account")
+                    Text(viewModel.loggedIn ? "Log out" : "Log in")
                         .foregroundColor(Color.white)
-                        .frame(width: 220.0, height: 45, alignment: .center)
+                        .frame(width: 300.0, height: 45, alignment: .center)
                         .background(Color.accentColor)
                         .clipShape(.rect(cornerRadius: 15))
                 }
             }
             HStack {
                 Text("Login State : ")
-                    .font(.footnote)
                 Text(viewModel.loggedIn ? "Looged in" : "Unregistered")
-                    .font(.footnote)
-                    .foregroundColor(viewModel.loggedIn ? Color.green : Color.black)
+                    .foregroundColor(viewModel.loggedIn ? Color.green : Color.red)
             }.padding(.top, 10.0)
         }
     }
 }
 
 #Preview {
-    LoginView(viewModel: LoginViewModel())
+    LoginView(viewModel: ViewModel())
 }

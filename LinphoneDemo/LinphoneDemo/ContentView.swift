@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var loginViewModel: LoginViewModel = LoginViewModel()
+    @StateObject var viewModel: ViewModel = ViewModel()
     var body: some View {
-        LoginView(viewModel: loginViewModel)
+        if viewModel.loggedIn == false {
+            LoginView(viewModel: viewModel)
+        } else {
+            OutgoingCallView(viewModel: viewModel)
+        }
     }
 }
 
