@@ -2,20 +2,15 @@
 //  ContentView.swift
 //  LinphoneDemo
 //
-//  Created by Shahwat Hasnaine on 24/6/24.
+//  Created by Shahwat Hasnaine on 25/6/24.
 //
 
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var loginViewModel: LoginViewModel = LoginViewModel()
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        LoginView(viewModel: loginViewModel)
     }
 }
 
