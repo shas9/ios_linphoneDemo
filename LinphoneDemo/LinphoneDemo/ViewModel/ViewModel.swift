@@ -21,11 +21,17 @@ class ViewModel : ObservableObject
     @Published var transportType : String = "UDP"
     
     // Outgoing call related variables
-    @Published var callMsg : String = "No call has been initiated"
-    @Published var isCallRunning : Bool = false
-    @Published var isVideoEnabled : Bool = false
-    @Published var canChangeCamera : Bool = false
-    @Published var remoteAddress : String = "sip:7001@192.168.1.121"
+    @Published var outgoingCallMsg : String = "No call has been initiated"
+    @Published var isOutgoingCallRunning : Bool = false
+    @Published var outgoingCallRemoteAddress : String = "sip:7001@192.168.1.121"
+    
+    // Incoming call related variables
+    @Published var incomingCallMsg : String = ""
+    @Published var isCallIncoming : Bool = false
+    @Published var isIncomingCallRunning : Bool = false
+    @Published var incomingCallRemoteAddress : String = "Nobody yet"
+    @Published var isSpeakerEnabled : Bool = false
+    @Published var isMicrophoneEnabled : Bool = false
     
     init()
     {
@@ -54,7 +60,7 @@ class ViewModel : ObservableObject
         mCoreDelegate = CoreDelegateStub( onCallStateChanged: { (core: Core, call: Call, state: Call.State, message: String) in
             // This function will be called each time a call state changes,
             // which includes new incoming/outgoing calls
-            self.callMsg = message
+            self.outgoingCallMsg = message
             
             if (state == .OutgoingInit) {
                 // First state an outgoing call will go through
@@ -69,14 +75,14 @@ class ViewModel : ObservableObject
                 // You may reach this state multiple times, for example after a pause/resume
                 // or after the ICE negotiation completes
                 // Wait for the call to be connected before allowing a call update
-                self.isCallRunning = true
+                self.isOutgoingCallRunning = true
                 
                 // Only enable toggle camera button if there is more than 1 camera
                 // We check if core.videoDevicesList.size > 2 because of the fake camera with static image created by our SDK (see below)
-                self.canChangeCamera = core.videoDevicesList.count > 2
+                //self.canChangeCamera = core.videoDevicesList.count > 2
             } else if (state == .Paused) {
                 // When you put a call in pause, it will became Paused
-                self.canChangeCamera = false
+                //self.canChangeCamera = false
             } else if (state == .PausedByRemote) {
                 // When the remote end of the call pauses it, it will be PausedByRemote
             } else if (state == .Updating) {
@@ -85,10 +91,24 @@ class ViewModel : ObservableObject
                 // When the remote requests a call update
             } else if (state == .Released) {
                 // Call state will be released shortly after the End state
-                self.isCallRunning = false
-                self.canChangeCamera = false
+                self.isOutgoingCallRunning = false
+               // self.canChangeCamera = false
             } else if (state == .Error) {
                 
+            }
+            
+            self.incomingCallMsg = message
+            if (state == .IncomingReceived) { // When a call is received
+                self.isCallIncoming = true
+                self.isIncomingCallRunning = false
+                self.incomingCallRemoteAddress = call.remoteAddress!.asStringUriOnly()
+            } else if (state == .Connected) { // When a call is over
+                self.isCallIncoming = false
+                self.isIncomingCallRunning = true
+            } else if (state == .Released) { // When a call is over
+                self.isCallIncoming = false
+                self.isIncomingCallRunning = false
+                self.incomingCallRemoteAddress = "Nobody yet"
             }
         }, onAccountRegistrationStateChanged: { (core: Core, account: Account, state: RegistrationState, message: String) in
             NSLog("New registration state is \(state) for user id \( String(describing: account.params?.identityAddress?.asString()))\n")
@@ -183,7 +203,7 @@ class ViewModel : ObservableObject
     func outgoingCall() {
         do {
             // As for everything we need to get the SIP URI of the remote and convert it to an Address
-            let remoteAddress = try Factory.Instance.createAddress(addr: remoteAddress)
+            let remoteAddress = try Factory.Instance.createAddress(addr: outgoingCallRemoteAddress)
             
             // We also need a CallParams object
             // Create call params expects a Call object for incoming calls, but for outgoing we must use null safely
@@ -231,6 +251,55 @@ class ViewModel : ObservableObject
                 }
             }
         } catch { NSLog(error.localizedDescription) }
+    }
+    
+    
+    //Incoming Call method
+    
+    func acceptCall() {
+        // IMPORTANT : Make sure you allowed the use of the microphone (see key "Privacy - Microphone usage description" in Info.plist) !
+        do {
+            // if we wanted, we could create a CallParams object
+            // and answer using this object to make changes to the call configuration
+            // (see OutgoingCall tutorial)
+            try mCore.currentCall?.accept()
+        } catch { NSLog(error.localizedDescription) }
+    }
+    
+    func muteMicrophone() {
+        // The following toggles the microphone, disabling completely / enabling the sound capture
+        // from the device microphone
+        mCore.micEnabled = !mCore.micEnabled
+        isMicrophoneEnabled = !isMicrophoneEnabled
+    }
+    
+    func toggleSpeaker() {
+        // Get the currently used audio device
+        let currentAudioDevice = mCore.currentCall?.outputAudioDevice
+        let speakerEnabled = currentAudioDevice?.type == AudioDeviceType.Speaker
+        
+        let test = currentAudioDevice?.deviceName
+        // We can get a list of all available audio devices using
+        // Note that on tablets for example, there may be no Earpiece device
+        for audioDevice in mCore.audioDevices {
+            
+            // For IOS, the Speaker is an exception, Linphone cannot differentiate Input and Output.
+            // This means that the default output device, the earpiece, is paired with the default phone microphone.
+            // Setting the output audio device to the microphone will redirect the sound to the earpiece.
+            if (speakerEnabled && audioDevice.type == AudioDeviceType.Microphone) {
+                mCore.currentCall?.outputAudioDevice = audioDevice
+                isSpeakerEnabled = false
+                return
+            } else if (!speakerEnabled && audioDevice.type == AudioDeviceType.Speaker) {
+                mCore.currentCall?.outputAudioDevice = audioDevice
+                isSpeakerEnabled = true
+                return
+            }
+            /* If we wanted to route the audio to a bluetooth headset
+            else if (audioDevice.type == AudioDevice.Type.Bluetooth) {
+            core.currentCall?.outputAudioDevice = audioDevice
+            }*/
+        }
     }
     
 }

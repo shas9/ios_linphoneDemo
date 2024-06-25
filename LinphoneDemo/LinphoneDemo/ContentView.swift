@@ -10,11 +10,15 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var viewModel: ViewModel = ViewModel()
     var body: some View {
-        if viewModel.loggedIn == false {
-            LoginView(viewModel: viewModel)
-        } else {
-            OutgoingCallView(viewModel: viewModel)
-        }
+        VStack {
+            if viewModel.loggedIn == false {
+                LoginView(viewModel: viewModel)
+            } else {
+                OutgoingCallView(viewModel: viewModel)
+            }
+        }.sheet(isPresented: $viewModel.isCallIncoming, content: {
+            IncomingCallView(viewModel: viewModel)
+        })
     }
 }
 

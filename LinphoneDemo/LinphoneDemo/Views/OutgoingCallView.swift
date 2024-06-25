@@ -12,7 +12,7 @@ struct OutgoingCallView: View {
     @ObservedObject var viewModel : ViewModel
     
     func callStateString() -> String {
-        if (viewModel.isCallRunning) {
+        if (viewModel.isOutgoingCallRunning) {
             return "Call running"
         } else {
             return "No Call"
@@ -26,33 +26,33 @@ struct OutgoingCallView: View {
                 HStack {
                     Text("Call dest:")
                         .font(.title3)
-                    TextField("", text : $viewModel.remoteAddress)
+                    TextField("", text : $viewModel.outgoingCallRemoteAddress)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .disabled(!viewModel.loggedIn)
                 }
                 VStack(spacing: 5) {
                     Button(action: {
-                        if (self.viewModel.isCallRunning) {
+                        if (self.viewModel.isOutgoingCallRunning) {
                             self.viewModel.terminateCall()
                         } else {
                             self.viewModel.outgoingCall()
                         }
                     })
                     {
-                        Text( (viewModel.isCallRunning) ? "End" : "Call")
+                        Text( (viewModel.isOutgoingCallRunning) ? "End" : "Call")
                             .foregroundColor(Color.white)
                             .frame(width: 300.0, height: 45, alignment: .center)
                             .background(Color.accentColor)
                             .clipShape(.rect(cornerRadius: 15))
                     }
                     HStack {
-                        Text(viewModel.isCallRunning ? "Running" : "")
+                        Text(viewModel.isOutgoingCallRunning ? "Running" : "")
                             .italic().foregroundColor(.green)
                         Spacer()
                     }
                     HStack {
                         Text("Call msg:").underline()
-                        Text(viewModel.callMsg)
+                        Text(viewModel.outgoingCallMsg)
                         Spacer()
                     }
                     VStack {

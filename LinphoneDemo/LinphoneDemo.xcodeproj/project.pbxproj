@@ -14,6 +14,7 @@
 		1A56E2632C2AACBF00A7657D /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A56E2622C2AACBF00A7657D /* ViewModel.swift */; };
 		1AA0FBC12C2AC03B00D323AE /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA0FBC02C2AC03B00D323AE /* LoginView.swift */; };
 		1AA0FBC32C2AC6C500D323AE /* OutgoingCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA0FBC22C2AC6C500D323AE /* OutgoingCallView.swift */; };
+		1AA0FBC72C2AD1B700D323AE /* IncomingCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA0FBC62C2AD1B700D323AE /* IncomingCallView.swift */; };
 		509639869DE4FE3A3B4F2511 /* Pods_LinphoneDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA696D4C6A3BAFC827FA092B /* Pods_LinphoneDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		1A56E2622C2AACBF00A7657D /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		1AA0FBC02C2AC03B00D323AE /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		1AA0FBC22C2AC6C500D323AE /* OutgoingCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutgoingCallView.swift; sourceTree = "<group>"; };
+		1AA0FBC62C2AD1B700D323AE /* IncomingCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingCallView.swift; sourceTree = "<group>"; };
 		4C66385879DADED059AE5D23 /* Pods-LinphoneDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinphoneDemo.debug.xcconfig"; path = "Target Support Files/Pods-LinphoneDemo/Pods-LinphoneDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		7D593A36BC3AFCB07A4CB05E /* Pods-LinphoneDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinphoneDemo.release.xcconfig"; path = "Target Support Files/Pods-LinphoneDemo/Pods-LinphoneDemo.release.xcconfig"; sourceTree = "<group>"; };
 		EA696D4C6A3BAFC827FA092B /* Pods_LinphoneDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinphoneDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +97,7 @@
 			children = (
 				1AA0FBC02C2AC03B00D323AE /* LoginView.swift */,
 				1AA0FBC22C2AC6C500D323AE /* OutgoingCallView.swift */,
+				1AA0FBC62C2AD1B700D323AE /* IncomingCallView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 			files = (
 				1A5325622C2A9C0D00B8534E /* ContentView.swift in Sources */,
 				1AA0FBC32C2AC6C500D323AE /* OutgoingCallView.swift in Sources */,
+				1AA0FBC72C2AD1B700D323AE /* IncomingCallView.swift in Sources */,
 				1A5325602C2A9C0D00B8534E /* LinphoneDemoApp.swift in Sources */,
 				1AA0FBC12C2AC03B00D323AE /* LoginView.swift in Sources */,
 				1A56E2632C2AACBF00A7657D /* ViewModel.swift in Sources */,
